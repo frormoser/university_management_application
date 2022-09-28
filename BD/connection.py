@@ -1,5 +1,17 @@
 import mysql.connector
 from mysql.connector import Error
+from dotenv import load_dotenv
+import os
+load_dotenv()
+
+
+host = os.getenv('MYSQL_HOST')
+db = os.getenv('MYSQL_DB')
+port = os.getenv('MYSQL_PORT')
+user = os.getenv('MYSQL_USER')
+password = os.getenv('MYSQL_PASSWORD')
+
+print(user)
 
 
 class DAO():
@@ -7,11 +19,11 @@ class DAO():
     def __init__(self):
         try:
             self.connection = mysql.connector.connect(
-                host='localhost',
-                port=3306,
-                user='root',
-                password='654321',
-                db='universidad'
+                host=host,
+                port=port,
+                user=user,
+                password=password,
+                db=db
             )
         except Error as ex:
             print("Error when trying to connect: {0}".format(ex))
@@ -20,7 +32,7 @@ class DAO():
         if self.connection.is_connected():
             try:
                 cursor = self.connection.cursor()
-                cursor.execute("SELECT * FROM curso ORDER BY nombre ASC")
+                cursor.execute("SELECT * FROM cursos ORDER BY nombre ASC")
                 results = cursor.fetchall()
                 return results
             except Error as ex:
